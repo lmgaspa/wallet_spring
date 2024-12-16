@@ -2,13 +2,11 @@ package com.dianaglobal.walletgeneration.controller;
 
 import com.dianaglobal.walletgeneration.model.Address;
 import com.dianaglobal.walletgeneration.repository.AddressRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/addresses")
@@ -22,28 +20,24 @@ public class AddressController {
         return repository.save(address);
     }
 
-    @GetMapping
-    public List<Address> getAllAddresses() {
-        return repository.findAll();
+    @GetMapping("/{userId}")
+    public ResponseEntity<Address> getAddressByUserId(@PathVariable String userId) {
+        System.out.println("Buscando userId: " + userId);
+        return repository.findByUserId(userId)
+                .map(address -> {
+                    System.out.println("Endereço encontrado: " + address);
+                    return ResponseEntity.ok(address);
+                })
+                .orElseGet(() -> {
+                    System.out.println("Nenhum endereço encontrado para userId: " + userId);
+                    return ResponseEntity.notFound().build();
+                });
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Address> getAddressById(@PathVariable String id) {
-        if (!ObjectId.isValid(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAddress(@PathVariable String id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/all")
+    public ResponseEntity<List<Address>> getAllAddresses() {
+        List<Address> addresses = repository.findAll();
+        System.out.println("Dados do MongoDB: " + addresses);
+        return ResponseEntity.ok(addresses);
     }
 }

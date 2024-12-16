@@ -7,19 +7,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Address {
 
     @Id
-    private String id;
+    private String _id;
+
+    private String userId;
     private String btcAddress;
     private String solAddress;
     private String dogeAddress;
     private String dianaAddress;
 
     // Getters e Setters
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getBtcAddress() {
