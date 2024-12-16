@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://btcex:dianalila@cluster0.y37vilu.mongodb.net/test?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true
