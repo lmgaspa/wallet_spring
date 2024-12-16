@@ -22,14 +22,14 @@ public class AddressController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<Address> getAddressByUserId(@PathVariable String userId) {
-        System.out.println("Buscando userId: " + userId);
+        System.out.println("Fetching userId: " + userId);
         return repository.findByUserId(userId)
                 .map(address -> {
-                    System.out.println("Endereço encontrado: " + address);
+                    System.out.println("Address found: " + address);
                     return ResponseEntity.ok(address);
                 })
                 .orElseGet(() -> {
-                    System.out.println("Nenhum endereço encontrado para userId: " + userId);
+                    System.out.println("No address found for userId: " + userId);
                     return ResponseEntity.notFound().build();
                 });
     }
